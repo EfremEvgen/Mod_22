@@ -1,19 +1,54 @@
-tickets = int(input("При покупке от 4-х билетов действует скидка 10% от стоимости заказа!\n"
-                   "Введите количество билетов, которое хотите приобрести на мероприятие:"))
-age = list(map(int, input("Укажите через пробел возраст посетителей: ").split()))
-while tickets != len(age):
-    age = list(map(int, input("Количество посетителей не совпадает с количеством билетов.\n"
-                              "Укажите через пробел возраст посетителей: ").split()))
+array = [(int(i)) for i in input('Введите целые числа через пробел: ').split()]
+print(array)
+def merge_list(a,b):
+    c = []
+    n = len(a)
+    m = len(b)
 
-price = []
-for i in age:
-    if i in range(0, 18):
-        price.append(0)
-    elif i in range(18, 25):
-        price.append(990)
+    i, j = 0, 0
+    while i < n and j < m:
+        if a[i] <= b[j]:
+            c.append(a[i])
+            i += 1
+        else:
+            c.append(b[j])
+            j += 1
+    c += a[i:] + b[j:]
+    return c
+def merge_sort(array):
+    N1 = len(array) // 2
+    a1 = array[:N1]
+    a2 = array[N1:]
+
+    if len(a1) > 1:
+        a1 = merge_sort(a1)
+    if len(a2) > 1:
+        a2 = merge_sort(a2)
+    return merge_list(a1, a2)
+
+array = merge_sort(array)
+print(array)
+
+while True:
+    try:
+        element = int(input('Введите целое число из списка: '))
+        if element not in array:
+            print('Указанное число не входит в список!')
+            raise Exception
+        break
+    except ValueError:
+        print('Введите целое число!')
+    except Exception:
+        print('Введите положительное число!')
+def binary_search(array, element, left, right):
+    if left > right:
+        return False
+    middle = (right + left) // 2
+    if array[middle] == element:
+        return middle
+    elif element < array[middle]:
+        return binary_search(array, element, left, middle - 1)
     else:
-        price.append(1390)
-if tickets > 3:
-    print("Сумма к оплате с учетом скидки: ", sum(price) - ((sum(price) / 100) * 10), "рублей")
-else:
-    print("Сумма к оплате: ", sum(price), "рублей")
+        return binary_search(array, element, middle + 1, right)
+
+print(binary_search(array, element, 0, len(array) - 1))
